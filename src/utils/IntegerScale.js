@@ -18,7 +18,10 @@ export function applyIntegerScale(viewW, viewH) {
   const c = document.querySelector("canvas");
   if (!c) return;
 
-  const scale = Math.max(1, Math.floor(Math.min(window.innerWidth / viewW, window.innerHeight / viewH)));
+  const scale = Math.max(
+    1,
+    Math.floor(Math.min(window.innerWidth / viewW, window.innerHeight / viewH)),
+  );
   c.style.width = viewW * scale + "px";
   c.style.height = viewH * scale + "px";
 }

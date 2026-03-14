@@ -34,7 +34,9 @@ export class HighScoreManager {
   getTop(levelId) {
     if (!levelId) return [];
     const arr = this._cache[levelId];
-    return Array.isArray(arr) ? arr.map((e) => ({ name: e.name, ms: e.ms })) : [];
+    return Array.isArray(arr)
+      ? arr.map((e) => ({ name: e.name, ms: e.ms }))
+      : [];
   }
 
   /**
@@ -64,13 +66,18 @@ export class HighScoreManager {
    * If name is missing, you can pass "___" and later replace by index via setNameAt().
    */
   submit(levelId, name, ms) {
-    if (!levelId) return { inserted: false, rank: null, top: this.getTop(levelId) };
+    if (!levelId)
+      return { inserted: false, rank: null, top: this.getTop(levelId) };
 
     const t = Number(ms);
-    if (!Number.isFinite(t) || t <= 0) return { inserted: false, rank: null, top: this.getTop(levelId) };
+    if (!Number.isFinite(t) || t <= 0)
+      return { inserted: false, rank: null, top: this.getTop(levelId) };
 
     const entry = {
-      name: String(name ?? "___").toUpperCase().slice(0, 3).padEnd(3, "_"),
+      name: String(name ?? "___")
+        .toUpperCase()
+        .slice(0, 3)
+        .padEnd(3, "_"),
       ms: t,
     };
 
@@ -84,7 +91,11 @@ export class HighScoreManager {
     this._save();
 
     const rank = trimmed.findIndex((e) => e.ms === t && e.name === entry.name);
-    return { inserted: rank !== -1, rank: rank !== -1 ? rank : null, top: this.getTop(levelId) };
+    return {
+      inserted: rank !== -1,
+      rank: rank !== -1 ? rank : null,
+      top: this.getTop(levelId),
+    };
   }
 
   /**
@@ -96,7 +107,10 @@ export class HighScoreManager {
     if (!top.length) return false;
     if (index < 0 || index >= top.length) return false;
 
-    top[index].name = String(name3 ?? "___").toUpperCase().slice(0, 3).padEnd(3, "_");
+    top[index].name = String(name3 ?? "___")
+      .toUpperCase()
+      .slice(0, 3)
+      .padEnd(3, "_");
     this._cache[levelId] = top;
     this._save();
     return true;
@@ -126,7 +140,12 @@ export class HighScoreManager {
 
     if (Array.isArray(seedObj?.scores)) {
       next[defaultLevelId] = seedObj.scores
-        .map((e) => ({ name: String(e.name ?? "___").toUpperCase().slice(0, 3), ms: Number(e.ms) }))
+        .map((e) => ({
+          name: String(e.name ?? "___")
+            .toUpperCase()
+            .slice(0, 3),
+          ms: Number(e.ms),
+        }))
         .filter((e) => Number.isFinite(e.ms) && e.ms > 0)
         .sort((a, b) => a.ms - b.ms)
         .slice(0, this.maxEntries);
@@ -135,7 +154,12 @@ export class HighScoreManager {
       for (const [lvl, arr] of Object.entries(seedObj)) {
         if (!Array.isArray(arr)) continue;
         next[lvl] = arr
-          .map((e) => ({ name: String(e.name ?? "___").toUpperCase().slice(0, 3), ms: Number(e.ms) }))
+          .map((e) => ({
+            name: String(e.name ?? "___")
+              .toUpperCase()
+              .slice(0, 3),
+            ms: Number(e.ms),
+          }))
           .filter((e) => Number.isFinite(e.ms) && e.ms > 0)
           .sort((a, b) => a.ms - b.ms)
           .slice(0, this.maxEntries);

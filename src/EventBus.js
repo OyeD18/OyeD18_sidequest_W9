@@ -21,7 +21,8 @@ export class EventBus {
   }
 
   on(eventName, fn) {
-    if (!this._listeners.has(eventName)) this._listeners.set(eventName, new Set());
+    if (!this._listeners.has(eventName))
+      this._listeners.set(eventName, new Set());
     this._listeners.get(eventName).add(fn);
     return () => this.off(eventName, fn);
   }
@@ -54,7 +55,10 @@ export class EventBus {
         try {
           fn(evt);
         } catch (err) {
-          console.error(`[EventBus] wildcard listener error for "${eventName}"`, err);
+          console.error(
+            `[EventBus] wildcard listener error for "${eventName}"`,
+            err,
+          );
         }
       });
     }

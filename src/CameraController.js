@@ -46,8 +46,16 @@ export class CameraController {
     const tileW = this.pkg.tiles?.tileW ?? 24;
     const tileH = this.pkg.tiles?.tileH ?? 24;
 
-    const tx = constrain(this.target.x, viewW / 2, levelW - viewW / 2 - tileW / 2);
-    const ty = constrain(this.target.y, viewH / 2 - tileH * 2, levelH - viewH / 2 - tileH);
+    const tx = constrain(
+      this.target.x,
+      viewW / 2,
+      levelW - viewW / 2 - tileW / 2,
+    );
+    const ty = constrain(
+      this.target.y,
+      viewH / 2 - tileH * 2,
+      levelH - viewH / 2 - tileH,
+    );
 
     const nextX = Math.round(lerp(this.cx ?? tx, tx, this.lerp));
     const nextY = Math.round(lerp(this.cy ?? ty, ty, this.lerp));

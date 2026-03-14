@@ -35,7 +35,12 @@ export class WinScreen {
   }
 
   // Accepts extra fields (best/last) but won’t break if you don’t pass them yet.
-  draw({ elapsedMs, bestMs = null, lastWinMs = null, lastWinWasNewBest = false } = {}) {
+  draw({
+    elapsedMs,
+    bestMs = null,
+    lastWinMs = null,
+    lastWinWasNewBest = false,
+  } = {}) {
     const viewW = this.pkg.view?.viewW ?? this.pkg.view?.w ?? 240;
     const viewH = this.pkg.view?.viewH ?? this.pkg.view?.h ?? 192;
 
@@ -81,7 +86,9 @@ export class WinScreen {
       }
 
       if (newBestLine) {
-        const xNew = Math.round((viewW - newBestLine.length * this.GLYPH_W) / 2);
+        const xNew = Math.round(
+          (viewW - newBestLine.length * this.GLYPH_W) / 2,
+        );
         this._drawOutlined(window, newBestLine, xNew, yNew, "#00ff7a");
       }
 

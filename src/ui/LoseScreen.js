@@ -33,7 +33,12 @@ export class LoseScreen {
         "abcdefghijklmnopqrstuvwxyz{|}~";
   }
 
-  draw({ elapsedMs, bestMs = null, lastWinMs = null, lastWinWasNewBest = false } = {}) {
+  draw({
+    elapsedMs,
+    bestMs = null,
+    lastWinMs = null,
+    lastWinWasNewBest = false,
+  } = {}) {
     const viewW = this.pkg.view?.viewW ?? 240;
     const viewH = this.pkg.view?.viewH ?? 192;
 
