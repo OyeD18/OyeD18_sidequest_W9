@@ -105,6 +105,7 @@ let winScreen;
 let loseScreen;
 let parallaxLayers = []; // Preloaded parallax layer defs [{ img, factor }, ...]
 
+// Global debug state (shared by DebugMenu and WORLD logic)
 window.debugState = {
   boarProbes: false,
   collisionBoxes: false,
@@ -268,7 +269,7 @@ function draw() {
   const bg = levelPkg.level?.view?.background ?? [69, 61, 79];
   background(bg[0], bg[1], bg[2]);
 
-  // Collision box for debug
+  // Collision box debug toggle
   allSprites.debug = !!(window.debugState && window.debugState.collisionBoxes);
 
   // Parallax uses camera.x from previous frame (fine with manual stepping)
@@ -278,7 +279,7 @@ function draw() {
     viewH,
   });
 
-  // debugmenu update (includes physics step)
+  // Keep paused state synced to debug-menu visibility.
   if (!debugMenu?.enabled && window.gamePaused) {
     window.gamePaused = false;
   }
@@ -330,6 +331,7 @@ function draw() {
   // Prefer Game mirror
   const elapsedMs = Number(game?.elapsedMs ?? game?.level?.elapsedMs ?? 0);
 
+  // Draw debug menu overlay if open
   debugMenu?.draw();
 
   // These overlay draw calls already guard camera.off/on internally,
@@ -348,11 +350,12 @@ function mousePressed() {
 
 function keyPressed(evt) {
   unlockAudioOnce();
-
+  // Debug menu: toggle with backtick (`) key
   if (evt && (evt.key === "`" || evt.key === "Dead")) {
     debugMenu?.toggle();
     return false;
   }
+  // If debug menu is open, only handle debug menu navigation/toggles
   if (window.gamePaused) {
     if (debugMenu?.enabled && debugMenu.handleInput(evt)) {
       return false;

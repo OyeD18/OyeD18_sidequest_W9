@@ -1,5 +1,5 @@
 // src/ui/DebugMenu.js
-import { updateAllBoarProbeVisibility } from "../entities/Boar.js";
+import { updateAllBoarProbeVisibility } from "../entities/Gob.js";
 // Debug menu overlay (VIEW/UI layer)
 //
 // Responsibilities:

@@ -1,5 +1,15 @@
-// src/entities/Boar.js
+// src/entities/Gob.js
 // Enemy controller (WORLD entity).
+
+// Utility: update all boar probe visibilities (for debug menu)
+export function updateAllBoarProbeVisibility(show) {
+  if (!window.game || !window.game.level || !window.game.level.boar) return;
+  for (const e of window.game.level.boar) {
+    if (e.frontProbe) e.frontProbe.visible = !!show;
+    if (e.footProbe) e.footProbe.visible = !!show;
+    if (e.groundProbe) e.groundProbe.visible = !!show;
+  }
+}
 //
 // Responsibilities:
 // - Create and configure boar sprites from tilemap spawns ("b")
@@ -36,22 +46,22 @@ export class BoarController {
 
     // tuning defaults (match monolith)
     const b = this.tuning.boar || {};
-    this.W = b.w ?? 18;
-    this.H = b.h ?? 12;
-    this.SPEED = b.speed ?? 0.6;
-    this.HP = b.hp ?? 3;
+    this.W = b.collider?.w ?? 18;
+    this.H = b.collider?.h ?? 12;
+    this.SPEED = b.move?.speed ?? 0.6;
+    this.HP = b.stats?.hp ?? 3;
 
-    this.KNOCK_FRAMES = b.knockFrames ?? 7;
-    this.KNOCK_X = b.knockbackX ?? 1.2;
-    this.KNOCK_Y = b.knockbackY ?? 1.6;
-    this.FLASH_FRAMES = b.flashFrames ?? 5;
+    this.KNOCK_FRAMES = b.hit?.knockFrames ?? 7;
+    this.KNOCK_X = b.hit?.knockX ?? 1.2;
+    this.KNOCK_Y = b.hit?.knockY ?? 1.6;
+    this.FLASH_FRAMES = b.hit?.flashFrames ?? 5;
 
-    this.TURN_COOLDOWN = b.turnCooldown ?? 12;
+    this.TURN_COOLDOWN = b.turning?.turnCooldownFrames ?? 12;
 
-    this.PROBE_FORWARD = b.probeForward ?? 10;
-    this.PROBE_FRONT_Y = b.probeFrontY ?? 10;
-    this.PROBE_HEAD_Y = b.probeHeadY ?? 0;
-    this.PROBE_SIZE = b.probeSize ?? 4;
+    this.PROBE_FORWARD = b.probes?.forward ?? 10;
+    this.PROBE_FRONT_Y = b.probes?.frontY ?? 10;
+    this.PROBE_HEAD_Y = b.probes?.headY ?? 0;
+    this.PROBE_SIZE = b.probes?.size ?? 4;
   }
 
   /**
