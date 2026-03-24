@@ -2,7 +2,7 @@
 // Enemy controller (WORLD entity).
 
 // Utility: update all boar probe visibilities (for debug menu)
-export function updateAllBoarProbeVisibility(show) {
+export function updateAllGobProbeVisibility(show) {
   if (!window.game || !window.game.level || !window.game.level.boar) return;
   for (const e of window.game.level.boar) {
     if (e.frontProbe) e.frontProbe.visible = !!show;

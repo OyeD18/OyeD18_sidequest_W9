@@ -107,7 +107,7 @@ let parallaxLayers = []; // Preloaded parallax layer defs [{ img, factor }, ...]
 
 // Global debug state (shared by DebugMenu and WORLD logic)
 window.debugState = {
-  boarProbes: false,
+  gobProbes: false,
   collisionBoxes: false,
   playerInvincible: false,
   winScoreOne: false,

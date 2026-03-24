@@ -1,5 +1,5 @@
 // src/ui/DebugMenu.js
-import { updateAllBoarProbeVisibility } from "../entities/Gob.js";
+import { updateAllGobProbeVisibility } from "../entities/Gob.js";
 // Debug menu overlay (VIEW/UI layer)
 //
 // Responsibilities:
@@ -20,10 +20,10 @@ export class DebugMenu {
     this.debugState = debugState;
     this.enabled = false;
     this.options = [
-      { label: "Show Boar Probes", key: "boarProbes" },
       { label: "Show Collision Boxes", key: "collisionBoxes" },
-      { label: "Player Invincible", key: "playerInvincible" },
       { label: "Win Condition = 1", key: "winScoreOne" },
+      { label: "Show Gob Probes", key: "gobProbes" },
+      { label: "Player Invincible", key: "playerInvincible" },
     ];
     this.selected = 0;
   }
@@ -33,7 +33,7 @@ export class DebugMenu {
     // Pause/unpause game
     window.gamePaused = this.enabled;
     // When menu is shown/hidden, update probe visibility in case it changed
-    updateAllBoarProbeVisibility(this.debugState.boarProbes);
+    updateAllGobProbeVisibility(this.debugState.boarProbes);
     // If unpausing, resume all animations
     if (!this.enabled) {
       for (const s of allSprites) {
@@ -56,13 +56,13 @@ export class DebugMenu {
     if (evt.key === " " || evt.key === "Enter") {
       const opt = this.options[this.selected];
       this.debugState[opt.key] = !this.debugState[opt.key];
-      // If boarProbes was toggled, update probe visibility immediately
-      if (opt.key === "boarProbes") {
-        updateAllBoarProbeVisibility(this.debugState.boarProbes);
+      // If gobProbes was toggled, update probe visibility immediately
+      if (opt.key === "gobProbes") {
+        updateAllGobProbeVisibility(this.debugState.boarProbes);
         // Mirror legacy global for compatibility
         window.showBoarProbes = this.debugState.boarProbes;
         // Dispatch event for any listeners
-        window.dispatchEvent(new Event("boarProbeDebugToggle"));
+        window.dispatchEvent(new Event("gobProbeDebugToggle"));
       }
       return true;
     }

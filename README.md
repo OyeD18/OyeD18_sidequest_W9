@@ -1,6 +1,6 @@
 ## Project Title
 
-GBDA302 Week 6 -
+GBDA302 Week 9
 
 ---
 
@@ -13,7 +13,7 @@ ID: 21066026
 
 ## Description
 
-A platformer with design assets.
+Adding a debug menu screen to my previour side quest.
 
 ---
 
@@ -21,12 +21,8 @@ A platformer with design assets.
 
 Learning Goals:
 
-- Build a side-scrolling platformer using modular game systems
-- Load complete levels
-- Add sounds
-- Add sprite assets
-- Create a parallax background system
-- Make it easier to implement new things to inporve as time goes on
+- Understand how the debug screen works
+- make game pause when debug screen is on
 
 ---
 
@@ -54,6 +50,6 @@ Audio:
 
 ## GenAI
 
-The code was written by Dolapo Ajiboye, but i used gGenAI to fix my parallax system.
+The code was written by Dolapo Ajiboye, but i used gGenAI to find why my code wasn't responding system.
 
 ---
