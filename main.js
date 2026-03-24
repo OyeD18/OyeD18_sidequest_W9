@@ -49,6 +49,7 @@ import { DebugOverlay } from "./src/DebugOverlay.js";
 
 import { WinScreen } from "./src/ui/WinScreen.js";
 import { LoseScreen } from "./src/ui/LoseScreen.js";
+import { DebugMenu } from "./src/ui/DebugMenu.js";
 
 // ------------------------------------------------------------
 // Helpers
@@ -103,6 +104,14 @@ let debugOverlay; // VIEW/SYSTEM: debug UI
 let winScreen;
 let loseScreen;
 let parallaxLayers = []; // Preloaded parallax layer defs [{ img, factor }, ...]
+
+window.debugState = {
+  boarProbes: false,
+  collisionBoxes: false,
+  playerInvincible: false,
+  winScoreOne: false,
+};
+let debugMenu;
 
 // Make URLs absolute so they can’t accidentally resolve relative to /src/...
 const LEVELS_URL = new URL("./data/levels.json", window.location.href).href;
@@ -198,6 +207,7 @@ function initRuntime() {
   // Systems
   inputManager = new InputManager();
   debugOverlay = new DebugOverlay();
+  debugMenu = new DebugMenu(window.debugState);
 
   // WORLD
   game = new Game(levelPkg, assets, {
@@ -258,6 +268,9 @@ function draw() {
   const bg = levelPkg.level?.view?.background ?? [69, 61, 79];
   background(bg[0], bg[1], bg[2]);
 
+  // Collision box for debug
+  allSprites.debug = !!(window.debugState && window.debugState.collisionBoxes);
+
   // Parallax uses camera.x from previous frame (fine with manual stepping)
   parallax?.draw({
     cameraX: camera.x || 0,
@@ -265,8 +278,23 @@ function draw() {
     viewH,
   });
 
-  // WORLD update (includes physics step)
-  game.update();
+  // debugmenu update (includes physics step)
+  if (!debugMenu?.enabled && window.gamePaused) {
+    window.gamePaused = false;
+  }
+
+  // Pause game update if debug menu is open
+  if (!window.gamePaused) {
+    game.update();
+  } else {
+    for (const s of allSprites) {
+      if (s.ani) s.ani.playing = false;
+      if (s.vel) {
+        s.vel.x = 0;
+        s.vel.y = 0;
+      }
+    }
+  }
 
   // VIEW: camera follow + clamp (after update so player position is current)
   cameraController?.update({
@@ -302,6 +330,8 @@ function draw() {
   // Prefer Game mirror
   const elapsedMs = Number(game?.elapsedMs ?? game?.level?.elapsedMs ?? 0);
 
+  debugMenu?.draw();
+
   // These overlay draw calls already guard camera.off/on internally,
   // but we keep them outside of any camera.off scope here.
   if (won) winScreen?.draw({ elapsedMs, game });
@@ -318,6 +348,17 @@ function mousePressed() {
 
 function keyPressed(evt) {
   unlockAudioOnce();
+
+  if (evt && (evt.key === "`" || evt.key === "Dead")) {
+    debugMenu?.toggle();
+    return false;
+  }
+  if (window.gamePaused) {
+    if (debugMenu?.enabled && debugMenu.handleInput(evt)) {
+      return false;
+    }
+    return false;
+  }
   return preventKeysThatScroll(evt);
 }
 
